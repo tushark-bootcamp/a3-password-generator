@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style-password.css" />
+    <title>Password Generator</title>
+  </head>
+  <body>
+    <header>
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 header-properties"><h1>Password Generator</h1></div>
+        <div class="col-md-4"></div>
+      </div>
+    </header>
+    <main class="main-container">
+      <div class="container" id="contact">
+        <div class="row card panel-border">
+          <div class="col-md-12 wrapper" id="contact-container">
+            <section>
+              <form>
+                <div class="form-group">
+                  <label for="inputMessage"><h3>Generate a Password</h3></label>
+                  <hr size="15" class="bold-gray" />
+                  <textarea class="form-control ta-border" rows="6" id="ta-pwd-input"></textarea>
+                  <hr size="15" class="bold-gray" />
+                </div>
+                <div class="row">
+                  <div class="col-md-4"></div>
+                  <div class="col-md-4">
+                    <button type="Generate Password" class="btn btn-primary" id="btn-gen-pwd">
+                      Generate Password
+                    </button>
+                  </div>
+                  <div class="col-md-4"></div>
+                </div>
+              </form>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="./password.js"></script>
+  </body>
+</html>
