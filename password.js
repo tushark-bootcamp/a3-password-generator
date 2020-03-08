@@ -71,10 +71,40 @@ function getPasswordCriteria() {
 }
 
 function buildPassword() {
-    alert("You will need to provide word of the month which is a minimum " + 0);
-    var wordOfTheMonth = prompt("Please give word");
+    var password = "";
+    if (isUpperReqd && isLowerReqd && isNumReqd && isSpclCharReqd) {
+        password = randomString(pwdLength, 'aA#!');
+    } else if (!isUpperReqd && isLowerReqd && isNumReqd && isSpclCharReqd) {
+        password = randomString(pwdLength, 'a#!');
+    } else if (isUpperReqd && !isLowerReqd && isNumReqd && isSpclCharReqd) {
+        password = randomString(pwdLength, 'A#!');
+    } else if (!isUpperReqd && isLowerReqd && isNumReqd && isSpclCharReqd) {
+        password = randomString(pwdLength, 'a#!');
+    } else {
+        password = randomString(pwdLength, 'a#!');
+    }
+    alert("The password is: " + password);
+    return password;
+}
+
+function randomString(length, chars) {
+    var mask = '';
+    if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
+    if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (chars.indexOf('#') > -1) mask += '0123456789';
+    if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
+    var result = '';
+    for (var i = 0; i < length; i++) {
+        result += mask[Math.floor(Math.random() * mask.length)];
+    }
+    return result;
 }
 
 btnGenPwd.addEventListener("click", function (event) {
-    setPreferredLength();
+    //setPreferredLength();
+    event.preventDefault();
+    getPasswordCriteria();
+    var password = buildPassword();
+    taPword.textContent = password;
+
 });
