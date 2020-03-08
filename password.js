@@ -58,31 +58,45 @@ function setPreferredLength() {
 
 function getPasswordCriteria() {
     setPreferredLength();
+    //var maskPwdCriteria = 'aA#!';
+    //var maskPwdCriteriaArr = ['a', 'A', '#', '!'];
+    var maskPwdCriteriaArr = [];
+    var maskPwdCriteria = "";
     isUpperReqd = confirm("Should the password have atleast one upper case character");
     if (!isUpperReqd) {
         alert("Since the upper case character is not prefered, the lower case characters will be used by default");
         isLowerReqd = true;
+        // Upper case is not required
+        //maskPwdCriteria = 'a#!';
+        maskPwdCriteriaArr.push('a');
     } else {
+        // if the upper case was set to yes, then ask for lower case requirement
         isLowerReqd = confirm("Should the password have atleast one lower case character");
+        if (!isLowerReqd) {
+            // Upper required but lower not required
+            maskPwdCriteriaArr.push('A');
+        } else {
+            // Both upper and lower are required
+            maskPwdCriteriaArr.push('a');
+            maskPwdCriteriaArr.push('A');
+        }
     }
-    //isLowerReqd = confirm("Should the password have atleast one lower case character");
     isNumReqd = confirm("Should the password have atleast one number");
+    if (isNumReqd) {
+        maskPwdCriteriaArr.push('#');
+    }
     isSpclCharReqd = confirm("Should the password have a special character");
+    if (isSpclCharReqd) {
+        maskPwdCriteriaArr.push('!');
+    }
+    maskPwdCriteria = maskPwdCriteriaArr.toString();
+    alert("maskPwdCriteria: " + maskPwdCriteria);
+    return maskPwdCriteria;
 }
 
 function buildPassword() {
-    var password = "";
-    if (isUpperReqd && isLowerReqd && isNumReqd && isSpclCharReqd) {
-        password = randomString(pwdLength, 'aA#!');
-    } else if (!isUpperReqd && isLowerReqd && isNumReqd && isSpclCharReqd) {
-        password = randomString(pwdLength, 'a#!');
-    } else if (isUpperReqd && !isLowerReqd && isNumReqd && isSpclCharReqd) {
-        password = randomString(pwdLength, 'A#!');
-    } else if (!isUpperReqd && isLowerReqd && isNumReqd && isSpclCharReqd) {
-        password = randomString(pwdLength, 'a#!');
-    } else {
-        password = randomString(pwdLength, 'a#!');
-    }
+    var mask = getPasswordCriteria();
+    var password = randomString(pwdLength, mask);
     alert("The password is: " + password);
     return password;
 }
@@ -93,18 +107,34 @@ function randomString(length, chars) {
     if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     if (chars.indexOf('#') > -1) mask += '0123456789';
     if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
+    alert("mask in randomString is: " + mask);
     var result = '';
     for (var i = 0; i < length; i++) {
-        result += mask[Math.floor(Math.random() * mask.length)];
+        var maskIndex = Math.floor(Math.random() * mask.length);
+        alert("maskedIndex: " + maskIndex);
+        result += mask[maskIndex];
+    }
+    return result;
+}
+
+function randomString2(length, chars) {
+    var mask = '';
+    if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
+    if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (chars.indexOf('#') > -1) mask += '0123456789';
+    if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
+    alert("mask in randomString is: " + mask);
+    var result = '';
+    for (var i = 0; i < length; i++) {
+        var maskIndex = Math.floor(Math.random() * mask.length);
+        alert("maskedIndex: " + maskIndex);
+        result += mask[maskIndex];
     }
     return result;
 }
 
 btnGenPwd.addEventListener("click", function (event) {
-    //setPreferredLength();
     event.preventDefault();
-    getPasswordCriteria();
     var password = buildPassword();
     taPword.textContent = password;
-
 });
