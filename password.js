@@ -56,9 +56,18 @@ function setPreferredLength() {
     alert("Password lengths is set to " + pwdLength);
 }
 
+function buildPassword() {
+    // First get the password criteria
+    var maskForPwdCriteria = getPasswordCriteria();
+    // Build the password based on the criteria
+    var password = randomString(pwdLength, maskForPwdCriteria);
+    alert("The password is: " + password);
+    return password;
+}
+
 function getPasswordCriteria() {
     setPreferredLength();
-    //var maskPwdCriteria = 'aA#!';
+    //var maskPwdCriteria = 'a,A,#,!,';
     //var maskPwdCriteriaArr = ['a', 'A', '#', '!'];
     var maskPwdCriteriaArr = [];
     var maskPwdCriteria = "";
@@ -67,7 +76,6 @@ function getPasswordCriteria() {
         alert("Since the upper case character is not prefered, the lower case characters will be used by default");
         isLowerReqd = true;
         // Upper case is not required
-        //maskPwdCriteria = 'a#!';
         maskPwdCriteriaArr.push('a');
     } else {
         // if the upper case was set to yes, then ask for lower case requirement
@@ -90,45 +98,47 @@ function getPasswordCriteria() {
         maskPwdCriteriaArr.push('!');
     }
     maskPwdCriteria = maskPwdCriteriaArr.toString();
-    alert("maskPwdCriteria: " + maskPwdCriteria);
+    //alert("maskPwdCriteria: " + maskPwdCriteria);
     return maskPwdCriteria;
 }
 
-function buildPassword() {
-    var mask = getPasswordCriteria();
-    var password = randomString(pwdLength, mask);
-    alert("The password is: " + password);
-    return password;
-}
-
-function randomString(length, chars) {
-    var mask = '';
-    if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
-    if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (chars.indexOf('#') > -1) mask += '0123456789';
-    if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
-    alert("mask in randomString is: " + mask);
-    var result = '';
-    for (var i = 0; i < length; i++) {
-        var maskIndex = Math.floor(Math.random() * mask.length);
-        alert("maskedIndex: " + maskIndex);
-        result += mask[maskIndex];
+function randomString(passWLength, chars) {
+    var maskArray = [];
+    // Create a maskArray[]; each element containing a set of chars to chose from for the password
+    var k = 0;
+    if (chars.indexOf('a') > -1) {
+        maskArray[k] = 'abcdefghijklmnopqrstuvwxyz';
+        k++;
     }
-    return result;
-}
-
-function randomString2(length, chars) {
-    var mask = '';
-    if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
-    if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (chars.indexOf('#') > -1) mask += '0123456789';
-    if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
-    alert("mask in randomString is: " + mask);
+    if (chars.indexOf('A') > -1) {
+        maskArray[k] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        k++;
+    }
+    if (chars.indexOf('#') > -1) {
+        maskArray[k] = '0123456789';
+        k++;
+    }
+    if (chars.indexOf('!') > -1) {
+        maskArray[k] = '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
+    }
+    //alert("mask in randomString is: " + mask);
     var result = '';
-    for (var i = 0; i < length; i++) {
-        var maskIndex = Math.floor(Math.random() * mask.length);
-        alert("maskedIndex: " + maskIndex);
-        result += mask[maskIndex];
+    alert("passwordLength: " + passWLength);
+    for (var i = 0; i < passWLength;) {
+        // Alternatively iterate through the collection of set of allowable pwd characters to randomly pick each password character.
+        for (var j = 0; j < maskArray.length; j++) {
+            var maxArrayAtJ = maskArray[j];
+            var maskArrayIndex = Math.floor(Math.random() * maxArrayAtJ.length);
+            //alert("maskArrayIndex: " + maskArrayIndex);
+            if(result.length < passWLength) {
+                result += maxArrayAtJ[maskArrayIndex];
+            } else {
+                return result;
+            }
+            // need to increment i as well as each character for the length of password gets used.
+            i++;
+            //alert("iteration i: " + i);
+        }
     }
     return result;
 }
