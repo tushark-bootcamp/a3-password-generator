@@ -125,7 +125,7 @@ function randomString(passWLength, chars) {
     var result = '';
     alert("passwordLength: " + passWLength);
     for (var i = 0; i < passWLength;) {
-        // Alternatively iterate through the collection of set of allowable pwd characters to randomly pick each password character.
+        // Alternately iterate through the collection of set of allowable pwd characters to randomly pick each password character.
         for (var j = 0; j < maskArray.length; j++) {
             var maxArrayAtJ = maskArray[j];
             var maskArrayIndex = Math.floor(Math.random() * maxArrayAtJ.length);
