@@ -7,35 +7,74 @@ var isNumReqd = true;
 var isSpclCharReqd = true;
 //var pwdCriteria = [length, upper];
 
-function getPreferredLength() {
-    var passwdLength = prompt("Enter the length of your password; it should not be less than 8 and greater than 128");
-    if (Number.isInteger(passwdLength)) {
-        if (passwdLength < 8 || passwdLength > 128) {
-            passwdLength = prompt("The password cannot be less than 8 and greater than 128; please re-enter");
+// Function to get the prefered length from the user with all validations.
+// If the length does not have a valid value, the caller of this function will call this method 
+//iteratively until a correct length is entered by the user
+function getPreferredLength(lengthPromptCount) {
+    var passwdLength = 0;
+    console.log("Start getPreferredLength");
+    var lastAttempt = false;
+    if (lengthPromptCount <= 3) {
+        if (lengthPromptCount == 3) {
+            alert("This is your last attempt to set the right password length else it will be set to 8");
+            lastAttempt = true;
         }
-
-    } else {
-        passwdLength = prompt("The password length should be a valid number; please re-enter the length of the password");
+        passwdLength = prompt("Enter the length of your password; it should not be less than 8 and greater than 128");
+        if (isNaN(passwdLength)) {
+            if (!lastAttempt) {
+                alert("The password length should be a valid number; please re-enter the length of the password");
+            } else {
+                alert("The password length is not a valid number");
+            }
+            passwdLength = 0;
+        } else if (passwdLength < 8 || passwdLength > 128) {
+            if (!lastAttempt) {
+                alert("The password length cannot be less than 8 and greater than 128; please re-enter");
+            } else {
+                alert("The password length is not between 8 and 128.");
+            }
+            passwdLength = 0;
+        } else {
+            pwdLength = parseInt(passwdLength);
+        }
+    } else { //if (lengthPromptCount > 3) 
+        alert("Setting the length to 8 for now as maximum attempts to set correct value has been exceeded !!");
+        passwdLength = 8;
+        pwdLength = 8;
     }
-    return passwdLength;
+    console.log("End of getPreferredLength");
+    return parseInt(passwdLength);
 }
-function getPasswordLength() {
-    var minLength = pwdLength;
-    if (isUpperReqd) {
-        minLength++;
+
+//This function sets the preferred length by iteratively calling the getPreferredLength() with all validations
+function setPreferredLength() {
+    var lengthPromptCount = 0
+    while (getPreferredLength(lengthPromptCount) == 0) {
+        lengthPromptCount++;
+        continue;
     }
+    alert("Password lengths is set to " + pwdLength);
+}
+
+function getPasswordCriteria() {
+    setPreferredLength();
+    isUpperReqd = confirm("Should the password have atleast one upper case character");
+    if (!isUpperReqd) {
+        alert("Since the upper case character is not prefered, the lower case characters will be used by default");
+        isLowerReqd = true;
+    } else {
+        isLowerReqd = confirm("Should the password have atleast one lower case character");
+    }
+    //isLowerReqd = confirm("Should the password have atleast one lower case character");
+    isNumReqd = confirm("Should the password have atleast one number");
+    isSpclCharReqd = confirm("Should the password have a special character");
 }
 
 function buildPassword() {
-
     alert("You will need to provide word of the month which is a minimum " + 0);
     var wordOfTheMonth = prompt("Please give word");
-
-
-
-
 }
 
 btnGenPwd.addEventListener("click", function (event) {
-    alert("pwd generated");
+    setPreferredLength();
 });
